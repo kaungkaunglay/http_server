@@ -3,17 +3,33 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-	List of Animals
-	</title>
+	<title>Fruits API</title>
 </head>
 <body>
-<h1>List of animals</h1>
-<select>
-	<option>Snake</option>
-	<option>Mouse</option>
-	<option>Bird</option>
-	<option>Horse</option>
-</select>
+	<label>Fruits</label>
+	<select id="lstFruit"></select>
+	<label>Add new fruit</label>
+	<input type="text" id="txtFruit">
+	<button id="btnAdd">Add Fruit</button>
+	<script> 
+		const lstFruit = document.getElementById("lstFruit");
+		const addFruit = document.getElementById("btnAdd");
+		const txtFruit = document.getElementById("txtFruit");
+		fetch("http://localhost:8081/api")
+		  .then(response => response.json())
+		  .then(jsonResponse => jsonResponse.forEach(fruit => {
+		    let o = document.createElement("option");
+		    o.textContent = fruit;
+		    lstFruit.appendChild(o);
+		}));
+		
+		addFruit.addEventListener("click", e=>{
+			let fruit = txtFruit.value; 
+			fetch(`http://localhost:8081/api?fruit=${fruit}`, {"method": "POST"})
+			.then(response => response.json())
+			.then(jsonResponse => alert(jsonResponse.message))
+		
+		})
+	</script>
 </body>
 </html>

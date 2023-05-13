@@ -1,4 +1,10 @@
 Banan
 Food
 Java
-Kaung
+Kaungfood
+kaungkaung
+kaungkaung
+food
+${fruit}
+fsdfsd
+hello

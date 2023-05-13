@@ -1,9 +1,14 @@
 import tornado.web
 import tornado.ioloop
 import json
+
 class basicRequestHandler(tornado.web.RequestHandler):
 	def get(self):
 		self.write("Some Changes")
+        
+class mainRequestHandler(tornado.web.RequestHandler):
+	def get(self):
+		self.render("index.html")
 
 class listAPIRequestHandler(tornado.web.RequestHandler):
 	def get(self):
@@ -11,7 +16,12 @@ class listAPIRequestHandler(tornado.web.RequestHandler):
 		lists = fh.read().splitlines()
 		fh.close()
 		self.write(json.dumps(lists))
-		
+	def post(self):
+		fruit = self.get_argument("fruit")
+		fh = open("list.txt", "a")
+		fh.write(f"{fruit}\n")
+		fh.close()
+		self.write(json.dumps({"message" :"Fruit added"}))
 class listRequestHandler(tornado.web.RequestHandler):
 	def get(self):
 		self.render("index.html")
@@ -32,13 +42,14 @@ class resourceParamRequestHandler(tornado.web.RequestHandler):
 if __name__ == '__main__':
 	app = tornado.web.Application([
 		(r"/", basicRequestHandler),
+        (r"/main", mainRequestHandler), 
 		(r"/api", listAPIRequestHandler),
 		(r"/animal",listRequestHandler),
         (r"/isEven", queryRequestHandler),
         (r"/students/([a-z]+)/([0-9]+)", resourceParamRequestHandler)
 		])
-
-	port = 8882
+        
+	port = 8081
 	app.listen(port)
 	print(f"Application is ready and listen on port {port}")
 	tornado.ioloop.IOLoop.current().start()
